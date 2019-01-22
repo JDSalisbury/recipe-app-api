@@ -8,13 +8,13 @@ class CommandTests(TestCase):
 
     def test_wait_for_db_ready(self):
         with patch('django.db.utils.ConnectionHandler.__getitem__') as gi:
-            gi.return_value = True #mocked
+            gi.return_value = True  # mocked
             call_command('wait_for_db')
             self.assertEqual(gi.call_count, 1)
 
-    @patch('time.sleep', return_value=True) #mocking the actual time.sleep
+    @patch('time.sleep', return_value=True)  # mocking the actual time.sleep
     def test_wait_for_db(self, ts):
         with patch('django.db.utils.ConnectionHandler.__getitem__') as gi:
-            gi.side_effect = [OpperationError] * 5 + [True]
+            gi.side_effect = [OperationalError] * 5 + [True]
             call_command('wait_for_db')
             self.assertEqual(gi.call_count, 6)
